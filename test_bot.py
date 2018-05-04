@@ -154,5 +154,5 @@ async def on_message(message):
 		    data_loaded = json.load(data_file)
 		    print(data_loaded)    	
 
-
-client.run("NDM5NTk5MzgyMDExMzE0MTgx.DcViWw.-i4BuoYQDL61PLUays9oERxvkhQ")
+#Enter server-id here
+client.run("")
