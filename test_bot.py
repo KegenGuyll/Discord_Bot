@@ -15,13 +15,15 @@ chat_filter = ["PINEAPPLE", "APPLE", "JELLO"]
 bypass_list = ["250738639418556427"]
 body_parts = ["head", "knee", "leg", "elbow","chin","face","nose","ear"]
 insults = ["triangle","fat","short","long","stupid","slow","oblong"]
+# Define data
+
 @client.event
 async def on_ready():
 	print("Bot is ready!")
 
 @client.event
 async def on_message(message):
-	
+	global member_list
 	
 	contents = message.content.split(" ")
 	for word in contents:
@@ -57,6 +59,7 @@ async def on_message(message):
 			userID = message.author.id
 			await client.send_message(message.channel,"<@%s> No" % (userID))
 	if message.content.upper().startswith("!QUOTE"):
+		import json
 		print("!QUOTE")
 		r = requests.get("https://talaikis.com/api/quotes/random/")
 		quote = r.content
@@ -128,13 +131,8 @@ async def on_message(message):
 		except NameError:
 		    to_unicode = str
 
-		# Define data
-		data = {'member list': member.name for member in message.server.members
-		        'a string': 'bla',
-		        'another dict': {'foo': 'bar',
-		                         'key': 'value',
-		                         'the answer': 42}}
-
+		data = {'member list': [{member.name for member in message.server.members}]}
+		member_list = data
 		# Write JSON file
 		with io.open('data.json', 'w', encoding='utf8') as outfile:
 		    str_ = json.dumps(data,
@@ -146,8 +144,15 @@ async def on_message(message):
 		with open('data.json') as data_file:
 		    data_loaded = json.load(data_file)
 		    print(data_loaded['member list'])
-
+		   	
 		print(data == data_loaded)
+
+	if message.content.upper().startswith("!MEMLIST"):
+		print("!MEMLIST")
+		print(member_list)
+		await client.send_message(message.channel,member_list['member list'][0:])
+
+       		
 
 	if message.content.upper().startswith("!READ"):
 		with open('data.json') as data_file:
@@ -155,4 +160,4 @@ async def on_message(message):
 		    print(data_loaded)    	
 
 #Enter server-id here
-client.run("")
+client.run("NDM5NTk5MzgyMDExMzE0MTgx.DcViWw.-i4BuoYQDL61PLUays9oERxvkhQ")
